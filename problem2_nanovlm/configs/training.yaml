@@ -1,0 +1,6 @@
+epochs: 10
+learning_rate: 0.001
+optimizer: adam
+loss: cross_entropy
+seed: 42
+device: cuda
