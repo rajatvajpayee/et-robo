@@ -1,7 +1,7 @@
 epochs: 20
-learning_rate: 0.03
+learning_rate: 0.01
 optimizer: SGD
 loss: cross_entropy
 seed: 42
 device: cuda
-batch_size: 1024
+batch_size: 128
