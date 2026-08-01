@@ -3,7 +3,7 @@ import setproctitle
 from src.tester import Tester
 from src.utils import load_config
 
-setproctitle.setproctitle("test_main.py")
+setproctitle.setproctitle("testing.py")
 
 
 def main():

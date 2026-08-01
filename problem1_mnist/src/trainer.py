@@ -9,7 +9,7 @@ from manual_nn.models import SimpleCNN
 from src.utils import set_seed
 from tqdm import tqdm 
 from sklearn.metrics import f1_score
-
+import numpy as np
 from torch.utils.tensorboard import SummaryWriter
 from datetime import datetime
 import os
@@ -80,6 +80,20 @@ class Trainer:
             self.save_dir = f"runs/problem1_mnist_{current_time}"
 
         self.writer = SummaryWriter(self.save_dir)
+        experiment_desc = f"""
+            Experiment: MNIST Baseline
+            * Model: SimpleCNN 
+            * Optimizer: {self.train_cfg.get('optimizer', 'N/A')}
+            * Learning Rate: {self.train_cfg.get('learning_rate', 'N/A')}
+            * Loss: {self.train_cfg.get('loss', 'N/A')}
+            * Epochs: {self.train_cfg.get('epochs', 'N/A')}
+            * Batch Size: {self.train_cfg.get('batch_size', 'N/A')}
+            * Seed: {self.train_cfg.get('seed', 'N/A')}
+            * Device: {self.train_cfg.get('device', 'N/A')}
+            * Notes: Testing basic convergence on MNIST dataset.
+        """
+
+        self.writer.add_text('Experiment_Description', experiment_desc, global_step=0)
 
     def accuracy(self, logits, labels):
         predictions = torch.argmax(logits, dim=1)
@@ -108,10 +122,12 @@ class Trainer:
         logits = self.model.forward(x)
         loss = self.loss_fn(logits, y)
         acc = self.accuracy(logits, y)
-
-        preds = torch.argmax(logits, dim=1).detach().cpu().numpy()
         targets = y.detach().cpu().numpy()
-        f1 = f1_score(targets, preds, average='macro')
+
+        probs = F.softmax(logits, dim=1).cpu().numpy()
+        labels = targets
+        preds = np.argmax(probs, axis=1)
+        f1 = f1_score(labels, preds, average="weighted", zero_division=0)
  
         return loss.item(), acc, f1
 
@@ -160,11 +176,13 @@ class Trainer:
 
             self.val_loss.append(val_loss)
             self.val_accuracy.append(val_acc)
-            if val_f1 >  self.best_f1:
-                self.best_f1  = val_f1
+            
 
             if val_acc > self.best_val_accuracy:
                 self.best_val_accuracy = val_acc
+
+            if val_f1 >  self.best_f1:
+                self.best_f1  = val_f1
                 checkpoint = {}
                 layer_id = 0
                 for layer in self.model.layers:
@@ -187,26 +205,15 @@ class Trainer:
 
         # Add TensorBoard writer support to log metrics
         # Log the experiment description and training config values
-        experiment_desc = f"""
-            ### Experiment: MNIST Baseline
-            * **Model**: SimpleCNN 
-            * **Optimizer**: {self.train_cfg.get('optimizer', 'N/A')}
-            * **Learning Rate**: {self.train_cfg.get('learning_rate', 'N/A')}
-            * **Loss**: {self.train_cfg.get('loss', 'N/A')}
-            * **Epochs**: {self.train_cfg.get('epochs', 'N/A')}
-            * **Batch Size**: {self.train_cfg.get('batch_size', 'N/A')}
-            * **Seed**: {self.train_cfg.get('seed', 'N/A')}
-            * **Device**: {self.train_cfg.get('device', 'N/A')}
-            * **Notes**: Testing basic convergence on MNIST dataset.
-        """
-
-        self.writer.add_text('Experiment_Description', experiment_desc, global_step=0)
+        
 
         # INSERT_YOUR_CODE
         # Prepare hyperparameters and metrics to log
         hparams = {
             'lr': self.train_cfg.get('learning_rate', 0.01),
             'bsize': self.train_cfg.get('batch_size', 64),
+            'optimizer': self.train_cfg.get('optimizer', 'SGD')
+            'activation': self.train_cfg.get('optimizer', 'ReLU')
             'layers': len(getattr(self.model, 'layers', [])),
             'epochs': self.train_cfg.get('epochs', 20),
         }

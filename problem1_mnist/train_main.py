@@ -4,7 +4,7 @@ from src.trainer import Trainer
 from src.utils import load_config
 
 
-setproctitle.setproctitle("train_main.py")
+setproctitle.setproctitle("training.py")
 
 # INSERT_YOUR_CODE
 import argparse
