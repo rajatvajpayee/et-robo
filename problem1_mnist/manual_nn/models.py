@@ -6,6 +6,7 @@ from .layers import (
     Linear,
 )
 
+from .layers_fast import Conv2DFast, MaxPool2DFast
 
 class Model:
     """Base Model (Factory)"""
@@ -37,9 +38,8 @@ class SimpleCNN(Model):
     """
 
     def __init__(self):
-
         self.layers = [
-            Conv2D(
+            Conv2DFast(
                 in_channels=1,
                 out_channels=8,
                 kernel_size=3,
@@ -47,7 +47,7 @@ class SimpleCNN(Model):
                 padding=1,
             ),
             ReLU(),
-            MaxPool2D(kernel_size=2, stride=2),
+            MaxPool2DFast(kernel_size=2, stride=2),
             Flatten(),
             Linear(8 * 14 * 14, 10),
         ]
@@ -97,6 +97,16 @@ class SimpleCNN(Model):
             if hasattr(layer, "to"):
                 layer.to(device)
         return self
+    
+
+    def named_parameters(self):
+        for i, layer in enumerate(self.layers):
+            if hasattr(layer, "parameters"):
+                params = layer.parameters()
+                grads = layer.gradients()
+
+                yield f"{layer.__class__.__name__}_{i}.weight", params[0], grads[0]
+                yield f"{layer.__class__.__name__}_{i}.bias", params[1], grads[1]
 
 if __name__ == "__main__":
     """Execute : python -m manual_nn.models to test it separately as it has relative import of layers"""
