@@ -2,14 +2,14 @@
 
 export PYTHONPATH=.
 
-MODEL_CFG="/home/rajat/scratch/et-robo/problem1_mnist/configs/model/model_baseline.yaml"
-TRAIN_CFG_DIR="/home/rajat/scratch/et-robo/problem1_mnist/configs/stepsize"
+TRAIN_CFG="/home/rajat/scratch/et-robo/problem1_mnist/configs/training/baseline.yaml"
+MODEL_CFG_DIR="/home/rajat/scratch/et-robo/problem1_mnist/configs/model"
 
 mkdir -p logs
 
-for TRAIN_CFG in ${TRAIN_CFG_DIR}/*.yaml
+for MODEL_CFG in ${MODEL_CFG_DIR}/*.yaml
 do
-    RUN_TITLE=$(basename "${TRAIN_CFG}" .yaml)
+    RUN_TITLE=$(basename "${MODEL_CFG}" .yaml)
 
     echo "Launching ${RUN_TITLE}..."
 
@@ -20,5 +20,6 @@ do
         > logs/${RUN_TITLE}.log 2>&1 &
 done
 
-echo "All experiments launched."
+echo "All model experiments launched."
+
 wait

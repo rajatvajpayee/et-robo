@@ -3,30 +3,36 @@ import torch.nn.functional as F
 import setproctitle
 import numpy as np
 from tqdm import tqdm
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix
 
 from src.data import get_dataloaders
 from manual_nn.models import SimpleCNN
 from src.utils import set_seed
 
+import os
+import csv
+from datetime import datetime
+from src.utils import load_config
+
 setproctitle.setproctitle("tester.py")
 
 
 class Tester:
-    def __init__(self, test_cfg, model_cfg):
-        self.test_cfg = test_cfg
-        self.model_cfg = model_cfg
-        set_seed(test_cfg["seed"])
+    def __init__(self,args):
+        self.args = args
+        self.test_cfg = load_config(self.args.test_cfg)
+        self.model_cfg = load_config(self.args.model_cfg)
+        set_seed(self.test_cfg["seed"])
 
         self.device = torch.device(
-            test_cfg["device"] if torch.cuda.is_available() else "cpu"
+            self.test_cfg["device"] if torch.cuda.is_available() else "cpu"
         )
 
-        self.model = SimpleCNN().to(self.device)
-        self.load_model(test_cfg["checkpoint"])
+        self.model = SimpleCNN(self.model_cfg).to(self.device)
+        self.load_model(args.checkpoint)
 
         _, _, self.test_loader = get_dataloaders(
-            batch_size=test_cfg["batch_size"]
+            batch_size=self.test_cfg["batch_size"]
         )
 
     def load_model(self, checkpoint_path):
@@ -51,6 +57,7 @@ class Tester:
             "precision": precision_score(labels, preds, average="weighted", zero_division=0),
             "recall": recall_score(labels, preds, average="weighted", zero_division=0),
             "f1": f1_score(labels, preds, average="weighted", zero_division=0),
+            "confusion_matrix": confusion_matrix(labels, preds),
         }
 
         try:
@@ -99,3 +106,46 @@ class Tester:
         print(f"Recall    : {metrics['recall']:.4f}")
         print(f"F1 Score  : {metrics['f1']:.4f}")
         print(f"ROC AUC   : {metrics['auc']:.4f}")
+        cm = metrics["confusion_matrix"]
+
+        print("\nConfusion Matrix")
+        print("      " + " ".join([f"{i:>5}" for i in range(10)]))
+
+        for i, row in enumerate(cm):
+            print(f"{i:>2} | " + " ".join([f"{v:>5}" for v in row]))
+
+        # results_file = "results.csv"
+        # fieldnames = [
+        #     "timestamp",
+        #     "config",
+        #     "loss",
+        #     "accuracy",
+        #     "precision",
+        #     "recall",
+        #     "f1",
+        #     "auc"
+        # ]
+        # # Add the config (model config) file name to CSV columns and output.
+        # model_cfg_name = os.path.basename(self.args.model_cfg) if hasattr(self.args, "model_cfg") else "unknown"
+        # # Prepare the row with current metrics and timestamp
+        # current_time = datetime.now().isoformat(timespec="seconds")
+        # new_row = {
+        #     "timestamp": current_time,
+        #     "config" : model_cfg_name,
+        #     "loss": f"{test_loss:.4f}",
+        #     "accuracy": f"{metrics['accuracy']:.4f}",
+        #     "precision": f"{metrics['precision']:.4f}",
+        #     "recall": f"{metrics['recall']:.4f}",
+        #     "f1": f"{metrics['f1']:.4f}",
+        #     "auc": f"{metrics['auc']:.4f}",
+        # }
+
+        # # Check if file exists and if header needs to be written
+        # write_header = not os.path.exists(results_file) or os.stat(results_file).st_size == 0
+
+        # with open(results_file, mode="a", newline="") as csvfile:
+        #     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        #     if write_header:
+        #         writer.writeheader()
+        #     writer.writerow(new_row)
+

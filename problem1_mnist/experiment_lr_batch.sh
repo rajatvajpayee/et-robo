@@ -3,7 +3,7 @@
 export PYTHONPATH=.
 
 MODEL_CFG="/home/rajat/scratch/et-robo/problem1_mnist/configs/model/model_baseline.yaml"
-TRAIN_CFG_DIR="/home/rajat/scratch/et-robo/problem1_mnist/configs/stepsize"
+TRAIN_CFG_DIR="/home/rajat/scratch/et-robo/problem1_mnist/configs/training"
 
 mkdir -p logs
 

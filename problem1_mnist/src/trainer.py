@@ -31,7 +31,7 @@ class Trainer:
         )
         print(self.device)
         # Model
-        self.model = SimpleCNN().to(self.device)
+        self.model = SimpleCNN(model_cfg).to(self.device)
 
         # Data
         self.train_loader, self.val_loader, _ = get_dataloaders(
@@ -81,7 +81,7 @@ class Trainer:
 
         self.writer = SummaryWriter(self.save_dir)
         experiment_desc = f"""
-            Experiment: MNIST Baseline
+            Experiment: MNIST 
             * Model: SimpleCNN 
             * Optimizer: {self.train_cfg.get('optimizer', 'N/A')}
             * Learning Rate: {self.train_cfg.get('learning_rate', 'N/A')}
@@ -90,7 +90,14 @@ class Trainer:
             * Batch Size: {self.train_cfg.get('batch_size', 'N/A')}
             * Seed: {self.train_cfg.get('seed', 'N/A')}
             * Device: {self.train_cfg.get('device', 'N/A')}
-            * Notes: Testing basic convergence on MNIST dataset.
+            * Model Config:
+            * Input Channels: {self.model_cfg.get('input_channels', 'N/A')}
+            * Num Classes: {self.model_cfg.get('num_classes', 'N/A')}
+            * CNN Filters: {self.model_cfg.get('cnn', {}).get('filters', 'N/A')}
+            * CNN Kernel Size: {self.model_cfg.get('cnn', {}).get('kernel_size', 'N/A')}
+            * CNN Pool Size: {self.model_cfg.get('cnn', {}).get('pool_size', 'N/A')}
+            * MLP Hidden Dims: {self.model_cfg.get('mlp', {}).get('hidden_dims', 'N/A')}
+            * Activation: {self.model_cfg.get('activation', 'N/A')}
         """
 
         self.writer.add_text('Experiment_Description', experiment_desc, global_step=0)
@@ -212,14 +219,16 @@ class Trainer:
         hparams = {
             'lr': self.train_cfg.get('learning_rate', 0.01),
             'bsize': self.train_cfg.get('batch_size', 64),
-            'optimizer': self.train_cfg.get('optimizer', 'SGD')
-            'activation': self.train_cfg.get('optimizer', 'ReLU')
+            'optimizer': self.train_cfg.get('optimizer', 'SGD'),
+            'activation': self.model_cfg.get('activation', 'ReLU'),
+            'mlp_hidden_dim': self.model_cfg.get('mlp', {}).get('hidden_dims', [None])[0],
             'layers': len(getattr(self.model, 'layers', [])),
             'epochs': self.train_cfg.get('epochs', 20),
         }
         metrics = {
+            'hparam/valloss': self.val_loss[-1] if self.val_loss else 0.0,
+            'hparam/trainloss': self.train_loss[-1] if self.train_loss else 0.0,
             'hparam/accuracy': self.best_val_accuracy,
-            'hparam/loss': self.val_loss[-1] if self.val_loss else 0.0,
             'hparam/f1': self.best_f1,
         }
         self.writer.add_hparams(hparams, metrics)

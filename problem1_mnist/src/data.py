@@ -4,7 +4,7 @@ from torchvision import datasets, transforms
 
 from src.utils import load_config
 
-def get_dataloaders(data_dir="/home/rajat/scratch/et-robo/data/mnist_local", batch_size=64, num_workers=4):
+def get_dataloaders(data_dir="/home/rajat/scratch/et-robo/data/mnist_local", batch_size=64, num_workers=4,shuffle=True):
 
     transform = transforms.Compose([
         transforms.Grayscale(num_output_channels=1),
@@ -30,21 +30,21 @@ def get_dataloaders(data_dir="/home/rajat/scratch/et-robo/data/mnist_local", bat
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,
-        shuffle=True,
+        shuffle=shuffle,
         num_workers=num_workers,
     )
 
     val_loader = DataLoader(
         val_dataset,
         batch_size=batch_size,
-        shuffle=False,
+        shuffle=shuffle,
         num_workers=num_workers,
     )
 
     test_loader = DataLoader(
         test_dataset,
         batch_size=batch_size,
-        shuffle=False,
+        shuffle=shuffle,
         num_workers=num_workers,
     )
 

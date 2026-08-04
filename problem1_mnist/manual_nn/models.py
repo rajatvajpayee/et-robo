@@ -1,6 +1,7 @@
 from .layers import (
     Conv2D,
     ReLU,
+    Sigmoid,
     MaxPool2D,
     Flatten,
     Linear,
@@ -37,21 +38,76 @@ class SimpleCNN(Model):
     Linear(1352 -> 10)
     """
 
-    def __init__(self):
-        self.layers = [
-            Conv2DFast(
-                in_channels=1,
-                out_channels=8,
-                kernel_size=3,
-                stride=1,
-                padding=1,
-            ),
-            ReLU(),
-            MaxPool2DFast(kernel_size=2, stride=2),
-            Flatten(),
-            Linear(8 * 14 * 14, 10),
-        ]
+    def __init__(self, model_cfg):
+        self.layers = []
+        in_channels = model_cfg["input_channels"]
+        num_classes = model_cfg["num_classes"]
+        filters = model_cfg["cnn"]["filters"]
+        kernel_size = model_cfg["cnn"]["kernel_size"]
+        pool_size = model_cfg["cnn"]["pool_size"]
+        hidden_dims = model_cfg["mlp"]["hidden_dims"]
+        activation = model_cfg["activation"].lower()
 
+        if activation == "relu":
+            activation_layer = ReLU
+        elif activation == "sigmoid":
+            activation_layer = Sigmoid
+        else:
+            raise ValueError(f"Unsupported activation: {activation}")
+
+        image_size = 28
+
+        # ---------------- CNN ---------------- #
+        for out_channels in filters:
+            self.layers.append(
+                Conv2DFast(
+                    in_channels=in_channels,
+                    out_channels=out_channels,
+                    kernel_size=kernel_size,
+                    stride=1,
+                    padding=kernel_size // 2,
+                )
+            )
+
+            self.layers.append(activation_layer())
+
+            self.layers.append(
+                MaxPool2DFast(
+                    kernel_size=pool_size,
+                    stride=pool_size,
+                )
+            )
+
+            in_channels = out_channels
+            image_size //= pool_size
+
+        # ---------------- Flatten ---------------- #
+        self.layers.append(Flatten())
+
+        in_features = in_channels * image_size * image_size
+
+        # ---------------- MLP ---------------- #
+        for hidden in hidden_dims:
+
+            self.layers.append(
+                Linear(
+                    in_features=in_features,
+                    out_features=hidden,
+                )
+            )
+
+            self.layers.append(activation_layer())
+
+            in_features = hidden
+
+        # ---------------- Output ---------------- #
+        self.layers.append(
+            Linear(
+                in_features=in_features,
+                out_features=num_classes,
+            )
+        )
+        
     def forward(self, x):
         for layer in self.layers:
             x = layer.forward(x)

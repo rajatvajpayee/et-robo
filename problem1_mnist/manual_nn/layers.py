@@ -68,6 +68,7 @@ class Linear(Layer):
         # Parameters
         self.weights = torch.empty(in_features, out_features)
         init.kaiming_normal_(self.weights, mode='fan_out') 
+        # init.xavier_uniform_(self.weights)
         self.bias = torch.zeros(out_features) 
 
         # Gradients
@@ -139,6 +140,21 @@ class ReLU(Layer):
     def to(self, device):
         return self
 
+class Sigmoid(Layer):
+    """Sigmoid Activation Layer"""
+    def __init__(self):
+        self.output = None
+    def forward(self, x):
+        # Numerically stable sigmoid
+        self.output = 1 / (1 + torch.exp(-x))
+        return self.output
+    def backward(self, grad_output):
+        # d(sigmoid)/dx = s * (1 - s)
+        return grad_output * self.output * (1 - self.output)
+    def to(self, device):
+        return self
+
+
 
 class Flatten(Layer):
     """Flatten Layer"""
@@ -168,6 +184,7 @@ class Conv2D(Layer):
         # Initialize weights and bias
         self.weights = torch.empty(out_channels, in_channels, kernel_size, kernel_size)
         init.kaiming_normal_(self.weights, mode='fan_out')
+        # init.xavier_uniform_(self.weights)
         self.bias = torch.zeros(out_channels)
 
         # Gradients
