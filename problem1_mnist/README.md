@@ -64,6 +64,8 @@ You can inspect them with:
 tensorboard --logdir runs
 ```
 
+**Use this [google drive](https://drive.google.com/drive/folders/1pen5tLmVZ5IYvVNGEpWSxgi2f80F3onh?usp=sharing) link to download all the tensorboard data (folder name is  `runs`). Download it and place in `problem1_mnist` folder**
+
 ## Notes
 
 - The best model checkpoint is available in `checkpoints/`.
