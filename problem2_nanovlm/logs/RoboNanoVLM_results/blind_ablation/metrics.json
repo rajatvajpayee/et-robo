@@ -1,0 +1,228 @@
+{
+  "n": 6676,
+  "accuracy": 0.7508987417615338,
+  "macro_precision": 0.7505029304710764,
+  "macro_recall": 0.7474514078440115,
+  "macro_f1": 0.7470774853038396,
+  "cohens_kappa": 0.6862030994706045,
+  "ece": 0.0732341193898822,
+  "mean_confidence": 0.8241328611514159,
+  "confusion_matrix": [
+    [
+      1156,
+      95,
+      65,
+      64,
+      77
+    ],
+    [
+      129,
+      1083,
+      63,
+      61,
+      54
+    ],
+    [
+      151,
+      107,
+      1052,
+      80,
+      59
+    ],
+    [
+      153,
+      99,
+      75,
+      1121,
+      79
+    ],
+    [
+      102,
+      73,
+      41,
+      36,
+      601
+    ]
+  ],
+  "reliability_bins": [
+    {
+      "lo": 0.0,
+      "n": 0,
+      "conf": null,
+      "acc": null
+    },
+    {
+      "lo": 0.06666666666666667,
+      "n": 0,
+      "conf": null,
+      "acc": null
+    },
+    {
+      "lo": 0.13333333333333333,
+      "n": 0,
+      "conf": null,
+      "acc": null
+    },
+    {
+      "lo": 0.2,
+      "n": 361,
+      "conf": 0.22904352914413334,
+      "acc": 0.19390581717451524
+    },
+    {
+      "lo": 0.26666666666666666,
+      "n": 352,
+      "conf": 0.29502677332872584,
+      "acc": 0.1846590909090909
+    },
+    {
+      "lo": 0.3333333333333333,
+      "n": 128,
+      "conf": 0.35802802757047314,
+      "acc": 0.2734375
+    },
+    {
+      "lo": 0.4,
+      "n": 226,
+      "conf": 0.4350074194434341,
+      "acc": 0.24778761061946902
+    },
+    {
+      "lo": 0.4666666666666667,
+      "n": 96,
+      "conf": 0.49829920388650456,
+      "acc": 0.2604166666666667
+    },
+    {
+      "lo": 0.5333333333333333,
+      "n": 110,
+      "conf": 0.572371970037875,
+      "acc": 0.5454545454545454
+    },
+    {
+      "lo": 0.6,
+      "n": 154,
+      "conf": 0.6378198575373805,
+      "acc": 0.5714285714285714
+    },
+    {
+      "lo": 0.6666666666666666,
+      "n": 250,
+      "conf": 0.7016140962027594,
+      "acc": 0.584
+    },
+    {
+      "lo": 0.7333333333333333,
+      "n": 365,
+      "conf": 0.7737475784014702,
+      "acc": 0.6
+    },
+    {
+      "lo": 0.8,
+      "n": 413,
+      "conf": 0.8311898368626985,
+      "acc": 0.6295399515738499
+    },
+    {
+      "lo": 0.8666666666666667,
+      "n": 411,
+      "conf": 0.897094865263632,
+      "acc": 0.683698296836983
+    },
+    {
+      "lo": 0.9333333333333333,
+      "n": 3810,
+      "conf": 0.9953823878577355,
+      "acc": 0.9732283464566929
+    }
+  ],
+  "answer_nll": 0.5951714348371618,
+  "perplexity": 1.8133417882688998,
+  "mean_prob_mass_outside_letters": 8.313240870663761e-05,
+  "per_template": {
+    "in the image from ext which": {
+      "n": 934,
+      "accuracy": 0.36509635974304067,
+      "macro_f1": 0.3637704226482399,
+      "cohens_kappa": 0.2035415282583124
+    },
+    "in the left image ext camera": {
+      "n": 349,
+      "accuracy": 0.3438395415472779,
+      "macro_f1": 0.32128170706655296,
+      "cohens_kappa": 0.17513675301888743
+    },
+    "is the robot s grasp of": {
+      "n": 299,
+      "accuracy": 0.6086956521739131,
+      "macro_f1": 0.48707720086684353,
+      "cohens_kappa": 0.47840283886743495
+    },
+    "is the robot s gripper open": {
+      "n": 550,
+      "accuracy": 0.6818181818181818,
+      "macro_f1": 0.5428854799184173,
+      "cohens_kappa": 0.5747416417402677
+    },
+    "is there any obstacle blocking the": {
+      "n": 543,
+      "accuracy": 1.0,
+      "macro_f1": 0.8,
+      "cohens_kappa": 1.0
+    },
+    "the robot is tasked to approaching": {
+      "n": 162,
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "cohens_kappa": 1.0
+    },
+    "the robot is tasked to firmly": {
+      "n": 122,
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "cohens_kappa": 1.0
+    },
+    "the robot is tasked to moving": {
+      "n": 112,
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "cohens_kappa": 1.0
+    },
+    "the robot is tasked to pick": {
+      "n": 165,
+      "accuracy": 0.4121212121212121,
+      "macro_f1": 0.40817665069702097,
+      "cohens_kappa": 0.2635623245755302
+    },
+    "the robot is to put the": {
+      "n": 114,
+      "accuracy": 0.868421052631579,
+      "macro_f1": 0.6949707602339181,
+      "cohens_kappa": 0.8248130314516955
+    },
+    "the robot s task is to": {
+      "n": 856,
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "cohens_kappa": 1.0
+    },
+    "the robot task is to pick": {
+      "n": 138,
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "cohens_kappa": 1.0
+    },
+    "the robot task is to put": {
+      "n": 216,
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "cohens_kappa": 1.0
+    },
+    "which language instruction best describes the": {
+      "n": 147,
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "cohens_kappa": 1.0
+    }
+  }
+}
