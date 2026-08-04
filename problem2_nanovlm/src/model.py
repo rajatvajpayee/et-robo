@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 import sys
-sys.path.append("/vision01_scratch/rajat/et-robo/problem2_nanovlm_noMLP/nanoVLM")
+sys.path.append("<Add nanoVLM directory here>")
 
 from models.vision_language_model import VisionLanguageModel
 from data.processors import get_tokenizer, get_image_processor, get_image_string

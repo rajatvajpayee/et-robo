@@ -7,12 +7,6 @@ from tqdm import tqdm
 import setproctitle
 setproctitle.setproctitle("train.py")
 
-try:
-    import setproctitle
-    setproctitle.setproctitle("trainer.py")
-except ImportError:
-    pass
-
 class Trainer:
 
     def __init__(self, model, train_loader, val_loader, optimizer, device="cuda",
