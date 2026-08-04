@@ -1,9 +1,12 @@
 input_channels: 1
 num_classes: 10
+
 cnn:
-  filters: [32, 64]
+  filters: [4]
   kernel_size: 3
   pool_size: 2
+
 mlp:
-  hidden_dims: [128]
-  activation: relu
+  hidden_dims: [64]
+
+activation: relu

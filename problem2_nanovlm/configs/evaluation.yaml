@@ -1,2 +1,0 @@
-metrics: [accuracy, precision, recall, f1]
-average: macro
