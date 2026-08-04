@@ -3,3 +3,7 @@
 *.sqlite3
 
 data/
+*.zip
+
+__pycache__/
+*.pyc

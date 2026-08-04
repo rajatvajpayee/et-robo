@@ -1,4 +1,4 @@
 dataset: mnist
-root: /home/rajat/scratch/et/data/mnist_local
+root: /home/rajat/scratch/et-robo/data/mnist_local
 batch_size: 64
 num_workers: 4

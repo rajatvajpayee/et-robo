@@ -7,6 +7,6 @@ cnn:
   pool_size: 2
 
 mlp:
-  hidden_dims: [256]
+  hidden_dims: [128]
 
 activation: relu
