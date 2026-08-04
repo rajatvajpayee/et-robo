@@ -2,7 +2,7 @@
 
 ---
 
-## 🛑 **IMPORTANT: One-time Setup for nanoVLM Dependency**
+## **IMPORTANT: One-time Setup for nanoVLM Dependency**
 
 Before running any training, evaluation, or scripts, you **MUST** specify the path to your local `nanoVLM` repository in the code.
 
